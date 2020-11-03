@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{F423CBB4-3599-564C-46FB-54C85154A0FE}</ProjectGuid>
+    <ProjectGuid>{6C329571-CFFA-6C07-1F82-C4C2C3186B43}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -47,6 +47,7 @@
   <PropertyGroup>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <UnityProjectGenerator>Package</UnityProjectGenerator>
+    <UnityProjectGeneratorVersion>2.0.3</UnityProjectGeneratorVersion>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2020.1.6f1</UnityVersion>
@@ -97,6 +98,7 @@
     <Compile Include="Assets\Tobii\Framework\Internal\TobiiHost.cs" />
     <Compile Include="Assets\Tobii\Framework\Internal\GazeFocusStub.cs" />
     <Compile Include="Assets\Tobii\Framework\Internal\HeadPoseDataProvider.cs" />
+    <Compile Include="Assets\Animation\NewBehaviourScript.cs" />
     <Compile Include="Assets\PracticeModeKeyPressed.cs" />
     <Compile Include="Assets\Tobii\Framework\Internal\GameViewInfo.cs" />
     <Compile Include="Assets\Tobii\Framework\Internal\IGazeFocusInternal.cs" />
@@ -106,6 +108,7 @@
     <Compile Include="Assets\OrangeBehavior.cs" />
     <Compile Include="Assets\Tobii\Framework\TobiiAPI.cs" />
     <Compile Include="Assets\UrnModel.cs" />
+    <Compile Include="Assets\TextScript.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Resources\custom_skybox.shader" />
