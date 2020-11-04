@@ -42,6 +42,9 @@ public class OrangeBehavior : MonoBehaviour
 
     public void ActivateSuccessFeedback() {
         StartCoroutine("Squeeze");
+        GameObject.Find("balloon").GetComponent<NewBehaviourScript>().StartAniBalloon();
+        GameObject.Find("CaucasianMale").GetComponent<NewBehaviourScript>().StartAniHand();
+        GameObject.Find("Main Camera").GetComponent<TextScript>().Tasker();
         //anim.Play("ballSqueeze");
 
     }
