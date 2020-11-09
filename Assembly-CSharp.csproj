@@ -102,13 +102,14 @@
     <Compile Include="Assets\PracticeModeKeyPressed.cs" />
     <Compile Include="Assets\Tobii\Framework\Internal\GameViewInfo.cs" />
     <Compile Include="Assets\Tobii\Framework\Internal\IGazeFocusInternal.cs" />
+    <Compile Include="Assets\TextScript.cs" />
     <Compile Include="Assets\Tobii\Framework\Internal\TobiiHostStub.cs" />
     <Compile Include="Assets\Tobii\Framework\Internal\MultiRaycastHistoricHitScore.cs" />
     <Compile Include="Assets\Tobii\Framework\Internal\HitTestFromPoint.cs" />
     <Compile Include="Assets\OrangeBehavior.cs" />
     <Compile Include="Assets\Tobii\Framework\TobiiAPI.cs" />
     <Compile Include="Assets\UrnModel.cs" />
-    <Compile Include="Assets\TextScript.cs" />
+    <Compile Include="Assets\BallonColourControl.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Resources\custom_skybox.shader" />

@@ -13,46 +13,41 @@ public class TextScript : MonoBehaviour
 
     public Text ReadySetGo;
 
+    BallonColourControl BCC;
+
     void Start()
     {
-        StartCoroutine(FreeCuePrep(freetime, time4Cue, time4Prep, fadeOut));
-        ReadySetGo.color = new Color(0, 0, 0, 0);
+        BCC = GameObject.Find("default").GetComponent<BallonColourControl>();
+        // StartCoroutine(FreeCuePrep(freetime, time4Cue, time4Prep, fadeOut));
     }
 
-    public void Tasker()
+    public void ReadyTextSucces()
     {
-        StartCoroutine(CuePrep(0, time4Cue, time4Prep, fadeOut));
+        StopCoroutine(CoPopText(time4Prep, fadeOut));
+        StopCoroutine(CoReadyText2(time4Prep, fadeOut));
+        StartCoroutine(CoReadyText(time4Prep, fadeOut));
     }
 
-    IEnumerator FreeCuePrep(float lookAround, float cue, float prep, float fadeTime)
+    public void ReadyTextFailed()
     {
-        ReadySetGo.color = new Color(0, 0, 0, 0);
-        ReadySetGo.text = "Have a look a round.";
-        while (ReadySetGo.color.a < 1)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a + (Time.deltaTime / fadeTime));
-            yield return null;
-        }
-        yield return new WaitForSeconds(lookAround);
-        while (ReadySetGo.color.a > 0)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a - (Time.deltaTime / fadeTime));
-            yield return null;
-        }
-        ReadySetGo.text = "Please look at the baloon.";
-        while (ReadySetGo.color.a < 1)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a + (Time.deltaTime / fadeTime));
-            yield return null;
-        }
-        yield return new WaitForSeconds(cue);
-        while (ReadySetGo.color.a > 0)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a - (Time.deltaTime / fadeTime));
-            yield return null;
-        }
-        ReadySetGo.color = new Color(1, 0, 0, 0);
+        StopCoroutine(CoPopText(time4Prep, fadeOut));
+        StopCoroutine(CoReadyText(time4Prep, fadeOut));
+        StartCoroutine(CoReadyText2(time4Prep, fadeOut));
+    }
+
+    public void PopText()
+    {
+        StopCoroutine(CoReadyText(time4Prep, fadeOut));
+        StopCoroutine(CoReadyText2(time4Prep, fadeOut));
+        StartCoroutine(CoPopText(time4Prep, fadeOut));
+    }
+
+    IEnumerator CoReadyText(float prep, float fadeTime)
+    {
+        //yield return new WaitForSeconds(timer);
+        ReadySetGo.color = new Color(1, 1, 1, 0);
         ReadySetGo.text = "Ready!";
+        BCC.ReadyColour();
         while (ReadySetGo.color.a < 1)
         {
             ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a + (Time.deltaTime / fadeTime));
@@ -66,6 +61,7 @@ public class TextScript : MonoBehaviour
         }
         ReadySetGo.color = new Color(1, 1, 0, 0);
         ReadySetGo.text = "Set!";
+        BCC.SetColour();
         while (ReadySetGo.color.a < 1)
         {
             ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a + (Time.deltaTime / fadeTime));
@@ -77,8 +73,45 @@ public class TextScript : MonoBehaviour
             ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a - (Time.deltaTime / fadeTime));
             yield return null;
         }
+    }
+
+    IEnumerator CoReadyText2(float prep, float fadeTime)
+    {
+        ReadySetGo.color = new Color(1, 0, 0, 0);
+        ReadySetGo.text = "Ready!";
+        BCC.ReadyColour();
+        while (ReadySetGo.color.a < 1)
+        {
+            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a + (Time.deltaTime / fadeTime));
+            yield return null;
+        }
+        yield return new WaitForSeconds(prep);
+        while (ReadySetGo.color.a > 0)
+        {
+            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a - (Time.deltaTime / fadeTime));
+            yield return null;
+        }
+        ReadySetGo.color = new Color(1, 1, 0, 0);
+        ReadySetGo.text = "Set!";
+        BCC.SetColour();
+        while (ReadySetGo.color.a < 1)
+        {
+            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a + (Time.deltaTime / fadeTime));
+            yield return null;
+        }
+        yield return new WaitForSeconds(prep);
+        while (ReadySetGo.color.a > 0)
+        {
+            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a - (Time.deltaTime / fadeTime));
+            yield return null;
+        }
+    }
+
+    IEnumerator CoPopText(float prep, float fadeTime)
+    {
         ReadySetGo.color = new Color(0, 1, 0, 1);
-        ReadySetGo.text = "Try to pop the baloon!";
+        ReadySetGo.text = "Try to pop the balloon!";
+        BCC.TaskColour();
         while (ReadySetGo.color.a < 1)
         {
             ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a + (Time.deltaTime / fadeTime));
@@ -90,68 +123,5 @@ public class TextScript : MonoBehaviour
             ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a - (Time.deltaTime / (fadeTime * 2)));
             yield return null;
         }
-
-    }
-
-IEnumerator CuePrep(float lookAround, float cue, float prep, float fadeTime)
-    {
-        ReadySetGo.color = new Color(0, 0, 0, 0);
-        while (ReadySetGo.color.a > 0)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a - (Time.deltaTime / fadeTime));
-            yield return null;
-        }
-        ReadySetGo.text = "Please look at the baloon.";
-        while (ReadySetGo.color.a < 1)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a + (Time.deltaTime / fadeTime));
-            yield return null;
-        }
-        yield return new WaitForSeconds(cue);
-        while (ReadySetGo.color.a > 0)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a - (Time.deltaTime / fadeTime));
-            yield return null;
-        }
-        ReadySetGo.color = new Color(1, 0, 0, 0);
-        ReadySetGo.text = "Ready!";
-        while (ReadySetGo.color.a < 1)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a + (Time.deltaTime / fadeTime));
-            yield return null;
-        }
-        yield return new WaitForSeconds(prep);
-        while (ReadySetGo.color.a > 0)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a - (Time.deltaTime / fadeTime));
-            yield return null;
-        }
-        ReadySetGo.color = new Color(1, 1, 0, 0);
-        ReadySetGo.text = "Set!";
-        while (ReadySetGo.color.a < 1)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a + (Time.deltaTime / fadeTime));
-            yield return null;
-        }
-        yield return new WaitForSeconds(prep);
-        while (ReadySetGo.color.a > 0)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a - (Time.deltaTime / fadeTime));
-            yield return null;
-        }
-        ReadySetGo.color = new Color(0, 1, 0, 1);
-        ReadySetGo.text = "Try to pop the baloon!";
-        while (ReadySetGo.color.a < 1)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a + (Time.deltaTime / fadeTime));
-            yield return null;
-        }
-
-        while (ReadySetGo.color.a > 0)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a - (Time.deltaTime / (fadeTime*2)));
-            yield return null;
-        }
-
     }
 }

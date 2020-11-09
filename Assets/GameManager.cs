@@ -260,6 +260,7 @@ public class GameManager : MonoBehaviour
                 if (interTrialTimer > interTrialIntervalSeconds && currentTrial < trialsTotal) {
                     interTrialTimer = 0f;
                     inputWindow = InputWindowState.Open;
+                    GameObject.Find("Main Camera").GetComponent<TextScript>().PopText();
                     SetFabAlarmVariability();
                     onInputWindowChanged.Invoke(inputWindow);
                     LogEvent("InputWindowChange");
@@ -283,6 +284,7 @@ public class GameManager : MonoBehaviour
                    //Debug.Log("inputWindow expired.");
                     // The input window expired
                     MakeInputDecision(null, true);
+                    GameObject.Find("Main Camera").GetComponent<TextScript>().ReadyTextFailed();
                     alarmFired = false;
                 }
             }
