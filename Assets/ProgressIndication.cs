@@ -51,7 +51,7 @@ public class ProgressIndication : MonoBehaviour
         inputWindowDuration = gameData.inputWindowSeconds;
         interTrialDuration = gameData.interTrialIntervalSeconds;
         //Beginning of the scene when pressed start experiment
-        //GameObject.Find("Main Camera").GetComponent<TextScript>().ReadyTextSucces();
+        GameObject.Find("Main Camera").GetComponent<TextScript>().ReadyText();
 
         // Calculate visual size of input window.
         float inputWindowRatio = inputWindowDuration / progressBarDuration;

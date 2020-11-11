@@ -271,7 +271,7 @@ public class GameManager : MonoBehaviour
                 //Debug.Log("inputwindow is open");
                 inputWindowTimer += Time.deltaTime;
                 if (inputWindowTimer > currentFabAlarm && alarmFired == false) {
-                   //Debug.Log("inputWindowTimer exceeded currentFabAlarm.");
+                    //Debug.Log("inputWindowTimer exceeded currentFabAlarm.");
                     // Fire fabricated input (if scheduled).
                     InputData fabInputData = new InputData {
                         validity = InputValidity.Accepted,
@@ -284,7 +284,6 @@ public class GameManager : MonoBehaviour
                    //Debug.Log("inputWindow expired.");
                     // The input window expired
                     MakeInputDecision(null, true);
-                    GameObject.Find("Main Camera").GetComponent<TextScript>().ReadyTextFailed();
                     alarmFired = false;
                 }
             }
@@ -420,7 +419,7 @@ public class GameManager : MonoBehaviour
                 // ignore the input.
             }
         } else if (windowExpired) {
-                CloseInputWindow();
+            CloseInputWindow();
         }
     }
 
@@ -450,4 +449,13 @@ public class GameManager : MonoBehaviour
         onGameStateChanged.Invoke(gameData);
     }
 
+    public float GetInputWindowSeconds()
+    {
+        return inputWindowSeconds;
+    }
+
+    public float GetInterTrialIntervalSeconds()
+    {
+        return interTrialIntervalSeconds;
+    }
 }

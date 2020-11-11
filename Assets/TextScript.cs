@@ -14,21 +14,53 @@ public class TextScript : MonoBehaviour
     public Text ReadySetGo;
 
     BallonColourControl BCC;
+    GameManager Manager;
+
+    bool textBegin = true;
+
+    bool started = false;
+    float time2NewStart = 0;
+    float fullTime = 0;
+
+    public void BeginText()
+    {
+        textBegin = !textBegin;
+    }
+
+    public void SetStart()
+    {
+        started = !started;
+    }
 
     void Start()
     {
         BCC = GameObject.Find("default").GetComponent<BallonColourControl>();
+        Manager = GameObject.Find("GameManager").GetComponent<GameManager>();
         // StartCoroutine(FreeCuePrep(freetime, time4Cue, time4Prep, fadeOut));
+        ReadyTextBegin();
+        fullTime = Manager.GetInputWindowSeconds() + Manager.GetInterTrialIntervalSeconds();
     }
 
-    public void ReadyTextSucces()
+    void Update()
     {
-        StopCoroutine(CoPopText(time4Prep, fadeOut));
-        StopCoroutine(CoReadyText2(time4Prep, fadeOut));
-        StartCoroutine(CoReadyText(time4Prep, fadeOut));
+        if(started == true)
+        {
+            time2NewStart += Time.deltaTime;
+            if(time2NewStart >= fullTime)
+            {
+                ReadyText();
+                time2NewStart = 0;
+            }
+        }
+
     }
 
-    public void ReadyTextFailed()
+    public void ReadyTextBegin()
+    {
+        StartCoroutine(CoReadyTextBegin(time4Prep, freetime, time4Prep));
+    }
+
+    public void ReadyText()
     {
         StopCoroutine(CoPopText(time4Prep, fadeOut));
         StopCoroutine(CoReadyText(time4Prep, fadeOut));
@@ -42,6 +74,36 @@ public class TextScript : MonoBehaviour
         StartCoroutine(CoPopText(time4Prep, fadeOut));
     }
 
+    IEnumerator CoReadyTextBegin(float prep, float timer, float fadeTime)
+    {
+        ReadySetGo.color = new Color(1, 1, 1, 0);
+        ReadySetGo.text = "Feel free to look around";
+        while (ReadySetGo.color.a < 1)
+        {
+            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a + (Time.deltaTime / fadeTime));
+            yield return null;
+        }
+        yield return new WaitForSeconds(prep);
+        while (ReadySetGo.color.a > 0)
+        {
+            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a - (Time.deltaTime / fadeTime));
+            yield return null;
+        }
+        yield return new WaitForSeconds(timer);
+        ReadySetGo.color = new Color(1, 1, 1, 0);
+        ReadySetGo.text = "Please focus on the balloon";
+        while (ReadySetGo.color.a < 1)
+        {
+            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a + (Time.deltaTime / fadeTime));
+            yield return null;
+        }
+        yield return new WaitForSeconds(prep);
+        while (ReadySetGo.color.a > 0)
+        {
+            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a - (Time.deltaTime / fadeTime));
+            yield return null;
+        }
+    }
     IEnumerator CoReadyText(float prep, float fadeTime)
     {
         //yield return new WaitForSeconds(timer);
@@ -117,10 +179,10 @@ public class TextScript : MonoBehaviour
             ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a + (Time.deltaTime / fadeTime));
             yield return null;
         }
-
+        yield return new WaitForSeconds(prep);
         while (ReadySetGo.color.a > 0)
         {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a - (Time.deltaTime / (fadeTime * 2)));
+            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a - (Time.deltaTime / (fadeTime)));
             yield return null;
         }
     }
