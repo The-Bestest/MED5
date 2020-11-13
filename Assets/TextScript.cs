@@ -19,7 +19,7 @@ public class TextScript : MonoBehaviour
     bool textBegin = true;
 
     bool started = false;
-    float time2NewStart = 0;
+    public float time2NewStart = 0;
     float fullTime = 0;
 
     public void BeginText()

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class OrangeBehavior : MonoBehaviour
 {
+    NewBehaviourScript Ball;
 
     [SerializeField]
     Material wrongMat;
@@ -19,6 +20,7 @@ public class OrangeBehavior : MonoBehaviour
     {
         renderer = GetComponent<Renderer>();
         correctMat = renderer.material;
+        Ball = GameObject.Find("balloon").GetComponent<NewBehaviourScript>();
     }
 
     // Update is called once per frame
@@ -42,7 +44,7 @@ public class OrangeBehavior : MonoBehaviour
 
     public void ActivateSuccessFeedback() {
         StartCoroutine("Squeeze");
-        GameObject.Find("balloon").GetComponent<NewBehaviourScript>().StartAniBalloon();
+        Ball.StartAniBalloon();
         GameObject.Find("CaucasianMale").GetComponent<NewBehaviourScript>().StartAniHand();
         //anim.Play("ballSqueeze");
 
