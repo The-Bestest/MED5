@@ -75,6 +75,7 @@ public enum TrialType  {
 
 public class GameManager : MonoBehaviour
 {
+    NewBehaviourScript Man;
 
     [Header("Trial Setup")]
 	[Tooltip("The total number of trials is calculated from the trial counts set here.")]
@@ -137,6 +138,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         loggingManager = GameObject.Find("LoggingManager").GetComponent<LoggingManager>();
+        Man = GameObject.Find("CaucasianMale").GetComponent<NewBehaviourScript>();
         urn = GetComponent<UrnModel>();
         SetupMechanisms();
         SetupUrn();
@@ -224,7 +226,6 @@ public class GameManager : MonoBehaviour
 
     private void LogEvent(string eventLabel) {
         Dictionary<string, object> gameLog = new Dictionary<string, object>() {
-            {"Timestamp", System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffff")},
             {"Event", eventLabel},
             {"InputWindow", System.Enum.GetName(typeof(InputWindowState), inputWindow)},
             {"InputWindowOrder", inputIndex},
@@ -260,7 +261,7 @@ public class GameManager : MonoBehaviour
                 if (interTrialTimer > interTrialIntervalSeconds && currentTrial < trialsTotal) {
                     interTrialTimer = 0f;
                     inputWindow = InputWindowState.Open;
-                    GameObject.Find("Main Camera").GetComponent<TextScript>().PopText();
+                    GameObject.Find("Camera").GetComponent<TextScript>().PopText();
                     SetFabAlarmVariability();
                     onInputWindowChanged.Invoke(inputWindow);
                     LogEvent("InputWindowChange");
@@ -271,7 +272,7 @@ public class GameManager : MonoBehaviour
                 //Debug.Log("inputwindow is open");
                 inputWindowTimer += Time.deltaTime;
                 if (inputWindowTimer > currentFabAlarm && alarmFired == false) {
-                    //Debug.Log("inputWindowTimer exceeded currentFabAlarm.");
+                   //Debug.Log("inputWindowTimer exceeded currentFabAlarm.");
                     // Fire fabricated input (if scheduled).
                     InputData fabInputData = new InputData {
                         validity = InputValidity.Accepted,
@@ -329,6 +330,7 @@ public class GameManager : MonoBehaviour
         loggingManager.SaveLog("Game");
         loggingManager.SaveLog("Sample");
         loggingManager.SaveLog("Meta");
+        loggingManager.ClearAllLogs();
     }
 
     public void CalculateRecogRate() {
@@ -419,7 +421,7 @@ public class GameManager : MonoBehaviour
                 // ignore the input.
             }
         } else if (windowExpired) {
-            CloseInputWindow();
+                CloseInputWindow();
         }
     }
 
@@ -458,4 +460,5 @@ public class GameManager : MonoBehaviour
     {
         return interTrialIntervalSeconds;
     }
+
 }

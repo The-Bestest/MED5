@@ -4,7 +4,17 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 0
+    path: Assets/MED5withVR.unity
+    guid: 9a16c39de3e68d849b91e2df4b451509
+  - enabled: 1
+    path: Assets/MED5backup.unity
+    guid: 9c702fd09e14edd458acc1e08f3490ae
   m_configObjects:
-    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 343c689f48aadcc459decc5f5863cb73,
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 6a4d70e19360d7442a1add54bcde7ded,
+      type: 2}
+    Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: e45cdb1c781f05645b1833f7e2eae325,
+      type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 6d089bf505949344791ce3857cd0a79c,
       type: 2}

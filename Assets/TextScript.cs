@@ -1,26 +1,31 @@
-﻿using System.Collections;
+﻿using Microsoft.VisualBasic;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class TextScript : MonoBehaviour
 {
+
+    public GameObject Balloon;
     public float freetime = 20;
-    public float time4Cue = 5;
-    public float time4Prep = 2; // Actual time is x2, it goes Ready when the phase begins, Set after the first time4Prep, Go after the second and then fades out
+    public float time4Cue = 3;
+    public float time4Prep = 4; // Actual time is x2, it goes Ready when the phase begins, Set after the first time4Prep, Go after the second and then fades out
+    public float time4Chill = 5;
 
     public float fadeOut = 1;
 
     public Text ReadySetGo;
 
-    BallonColourControl BCC;
+    public BallonColourControl BCC;
     GameManager Manager;
 
     bool textBegin = true;
 
     bool started = false;
-    public float time2NewStart = 0;
+    public float time2NewStart = 5;
     float fullTime = 0;
+    private int trials = 0;
 
     public void BeginText()
     {
@@ -34,8 +39,9 @@ public class TextScript : MonoBehaviour
 
     void Start()
     {
-        BCC = GameObject.Find("default").GetComponent<BallonColourControl>();
+        //BCC = GameObject.Find("default").GetComponent<BallonColourControl>();
         Manager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        //Balloon = GameObject.Find("balloon").GetComponent<GameObject>();
         // StartCoroutine(FreeCuePrep(freetime, time4Cue, time4Prep, fadeOut));
         ReadyTextBegin();
         fullTime = Manager.GetInputWindowSeconds() + Manager.GetInterTrialIntervalSeconds();
@@ -62,128 +68,97 @@ public class TextScript : MonoBehaviour
 
     public void ReadyText()
     {
+        StopCoroutine(CoChillText(time4Chill, fadeOut));
         StopCoroutine(CoPopText(time4Prep, fadeOut));
         StopCoroutine(CoReadyText(time4Prep, fadeOut));
-        StartCoroutine(CoReadyText2(time4Prep, fadeOut));
+        StartCoroutine(CoReadyText2(time4Chill, time4Cue, time4Prep, fadeOut));
     }
 
     public void PopText()
     {
         StopCoroutine(CoReadyText(time4Prep, fadeOut));
-        StopCoroutine(CoReadyText2(time4Prep, fadeOut));
+        StopCoroutine(CoReadyText2(time4Chill, time4Cue, time4Prep, fadeOut));
+        StopCoroutine(CoChillText(time4Chill, fadeOut));
         StartCoroutine(CoPopText(time4Prep, fadeOut));
+        trials++;
+
+        Debug.Log("Trials: " + trials);
+    }
+
+    public void ChillText()
+    {
+        StopCoroutine(CoPopText(time4Prep, fadeOut));
+        StopCoroutine(CoReadyText(time4Prep, fadeOut));
+        StopCoroutine(CoReadyText2(time4Chill, time4Cue, time4Prep, fadeOut));
+        StartCoroutine(CoChillText(time4Chill, fadeOut));
     }
 
     IEnumerator CoReadyTextBegin(float prep, float timer, float fadeTime)
     {
-        ReadySetGo.color = new Color(1, 1, 1, 0);
+        ReadySetGo.color = new Color(1, 1, 1, 1);
         ReadySetGo.text = "Feel free to look around";
-        while (ReadySetGo.color.a < 1)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a + (Time.deltaTime / fadeTime));
-            yield return null;
-        }
-        yield return new WaitForSeconds(prep);
-        while (ReadySetGo.color.a > 0)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a - (Time.deltaTime / fadeTime));
-            yield return null;
-        }
+ 
+ 
         yield return new WaitForSeconds(timer);
-        ReadySetGo.color = new Color(1, 1, 1, 0);
-        ReadySetGo.text = "Please focus on the balloon";
-        while (ReadySetGo.color.a < 1)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a + (Time.deltaTime / fadeTime));
-            yield return null;
-        }
+        ReadySetGo.color = new Color(1, 1, 1, 1);
+        ReadySetGo.text = "Rest";
+
         yield return new WaitForSeconds(prep);
-        while (ReadySetGo.color.a > 0)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a - (Time.deltaTime / fadeTime));
-            yield return null;
-        }
     }
     IEnumerator CoReadyText(float prep, float fadeTime)
     {
         //yield return new WaitForSeconds(timer);
-        ReadySetGo.color = new Color(1, 1, 1, 0);
+        ReadySetGo.color = new Color(1, 1, 1, 1);
         ReadySetGo.text = "Ready!";
         BCC.ReadyColour();
-        while (ReadySetGo.color.a < 1)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a + (Time.deltaTime / fadeTime));
-            yield return null;
-        }
-        yield return new WaitForSeconds(prep);
-        while (ReadySetGo.color.a > 0)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a - (Time.deltaTime / fadeTime));
-            yield return null;
-        }
-        ReadySetGo.color = new Color(1, 1, 0, 0);
+
+        yield return new WaitForSeconds(time4Cue);
+
+        ReadySetGo.color = new Color(1, 1, 0, 1);
         ReadySetGo.text = "Set!";
         BCC.SetColour();
-        while (ReadySetGo.color.a < 1)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a + (Time.deltaTime / fadeTime));
-            yield return null;
-        }
-        yield return new WaitForSeconds(prep);
-        while (ReadySetGo.color.a > 0)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a - (Time.deltaTime / fadeTime));
-            yield return null;
-        }
+
+        yield return new WaitForSeconds(time4Prep);
+  
     }
 
-    IEnumerator CoReadyText2(float prep, float fadeTime)
+    IEnumerator CoReadyText2(float chilltimer, float cuetimer, float preptimer, float fadeTime)
     {
-        ReadySetGo.color = new Color(1, 0, 0, 0);
+        ReadySetGo.color = new Color(1, 1, 1, 1);
+        ReadySetGo.text = "Rest";
+        BCC.InterColour();
+        yield return new WaitForSeconds(chilltimer);
+
+        Balloon.SetActive(true);
+
+        Balloon.SetActive(true);
+
+        ReadySetGo.color = new Color(1, 0, 0, 1);
         ReadySetGo.text = "Ready!";
         BCC.ReadyColour();
-        while (ReadySetGo.color.a < 1)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a + (Time.deltaTime / fadeTime));
-            yield return null;
-        }
-        yield return new WaitForSeconds(prep);
-        while (ReadySetGo.color.a > 0)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a - (Time.deltaTime / fadeTime));
-            yield return null;
-        }
-        ReadySetGo.color = new Color(1, 1, 0, 0);
+
+        yield return new WaitForSeconds(cuetimer);
+
+        ReadySetGo.color = new Color(1, 1, 0, 1);
         ReadySetGo.text = "Set!";
         BCC.SetColour();
-        while (ReadySetGo.color.a < 1)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a + (Time.deltaTime / fadeTime));
-            yield return null;
-        }
-        yield return new WaitForSeconds(prep);
-        while (ReadySetGo.color.a > 0)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a - (Time.deltaTime / fadeTime));
-            yield return null;
-        }
+
+        yield return new WaitForSeconds(preptimer);
     }
 
     IEnumerator CoPopText(float prep, float fadeTime)
     {
         ReadySetGo.color = new Color(0, 1, 0, 1);
-        ReadySetGo.text = "Try to pop the balloon!";
+        ReadySetGo.text = "Pop it!";
         BCC.TaskColour();
-        while (ReadySetGo.color.a < 1)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a + (Time.deltaTime / fadeTime));
-            yield return null;
-        }
+        yield return null;
+    }
+
+    IEnumerator CoChillText(float prep, float fadeTime)
+    {
+        ReadySetGo.color = new Color(1, 1, 1, 1);
+        ReadySetGo.text = "Rest";
+        BCC.InterColour();
         yield return new WaitForSeconds(prep);
-        while (ReadySetGo.color.a > 0)
-        {
-            ReadySetGo.color = new Color(ReadySetGo.color.r, ReadySetGo.color.g, ReadySetGo.color.b, ReadySetGo.color.a - (Time.deltaTime / (fadeTime)));
-            yield return null;
-        }
     }
 }

@@ -14,6 +14,7 @@ public class SoundManager : MonoBehaviour
     private AudioClip correctSound;
     [SerializeField]
     private AudioClip wrongSound;
+    private NewBehaviourScript behaviour;
     AudioSource audioSource;
     private SoundState soundState = SoundState.None;
     private bool madeDecision = false;
@@ -22,12 +23,14 @@ public class SoundManager : MonoBehaviour
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
+        behaviour = GetComponent<NewBehaviourScript>();
     }
 
     public void OnGameDecision(GameDecisionData decisionData) {
         if (decisionData.decision == TrialType.AccInput) {
             audioSource.PlayOneShot(correctSound,0.75f);
             soundState = SoundState.CorrectSound;
+            behaviour.Animate();
         } else if (decisionData.decision == TrialType.FabInput) {
             audioSource.PlayOneShot(correctSound,0.75f);
             soundState = SoundState.CorrectSound;
@@ -36,11 +39,5 @@ public class SoundManager : MonoBehaviour
             audioSource.PlayOneShot(wrongSound,1f);
             soundState = SoundState.None;
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
